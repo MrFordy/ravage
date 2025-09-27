@@ -3,8 +3,7 @@
 # FILE: setup_ssh.sh
 # DESCRIPTION: A script to install and configure the SSH service with security best practices.
 # This script is designed to be called from the main setup_all.sh script.
-# VERSION: 1.0
-# DATE: 2025-09-21
+
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -16,7 +15,9 @@ cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
 
 # Update the SSH configuration for security.
 # This command uses sed to modify the /etc/ssh/sshd_config file in place.
-# It sets three important security options.
+# It sets three important security options 1) changes ssh from port 22 to
+# port 2222, 2) disables the ability for root login via ssh, and 3) disables 
+# password authentication via ssh requiring key pair authentication.
 sed -i 's/^#\?Port 22/Port 2222/' /etc/ssh/sshd_config
 sed -i 's/^#\?PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 sed -i 's/^#\?PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
