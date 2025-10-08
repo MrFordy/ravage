@@ -9,7 +9,7 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-echo "Setting up Keepalived for Pi-holehigh availability..."
+echo "Setting up Keepalived for Pi-hole high availability..."
 
 ### Retrieve Keepalived password from argument
 # The password is passed as an argument when this script is called.

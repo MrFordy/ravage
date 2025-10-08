@@ -10,11 +10,6 @@ set -e
 
 echo "Setting up Unbound DNS resolver..."
 
-### Install Unbound
-# unbound is not installed as part of the preseed.cfg, so we install it here.
-apt-get update
-apt-get install -y unbound
-
 ### Download Root Hints
 # This file is essential for Unbound to resolve top-level domains from the root servers.
 echo "Downloading root hints file..."

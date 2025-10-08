@@ -16,7 +16,7 @@ ufw default allow outgoing
 
 ### Exceptions
 # Explicitly allow necessary services:
-ufw allow ssh            # Port 2222 (SSH) - changed from default 22
+ufw allow 2222/tcp       # Port 2222 (SSH) - custom SSH port changed from 22
 ufw allow 53/tcp         # Port 53 (DNS TCP) - For zone transfers
 ufw allow 53/udp         # Port 53 (DNS UDP) - For queries
 ufw allow 80/tcp         # Port 80 (HTTP) - For Pi-hole Web Interface

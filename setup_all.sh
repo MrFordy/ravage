@@ -59,6 +59,8 @@ echo "Running setup_keepalived.sh..."
 echo "Running setup_nebula-sync.sh..."
 /root/setup_scripts/setup_nebula-sync.sh "$PIHOLE_PASSWORD"
 
-echo "--- All setup scripts complete ---"
+echo "=============================================="
+echo "  All setup scripts completed successfully"
+echo "=============================================="
 
 exit 0

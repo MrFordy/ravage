@@ -30,8 +30,8 @@ export PIHOLE_DNS_="127.0.0.1#5353"
 export INSTALL_WEB_SERVER=true
 export INSTALL_WEB_INTERFACE=true
 export DHCP_ACTIVE=true
-export DHCP_START="192.168.1.10"
-export DHCP_END="192.168.1.249"
+export DHCP_START="192.168.0.10"
+export DHCP_END="192.168.0.249"
 export NTP_SERVER="ntp.org"
 export PIHOLE_SKIP_INSTALL_CHECK=true
 
@@ -50,10 +50,10 @@ pihole -g
 
 ### Add static DHCP leases from a separate file
 echo "Adding static DHCP leases from separate file..."
-if [ ! -f "04-pihole-static-dhcp.conf" ]; then
+if [ ! -f "/root/setup_scripts/04-pihole-static-dhcp.conf" ]; then
     echo "WARNING: No static DHCP leases file found. Skipping static lease configuration."
 else
-    cp 04-pihole-static-dhcp.conf /etc/dnsmasq.d/04-pihole-static-dhcp.conf
+    cp /root/setup_scripts/04-pihole-static-dhcp.conf /etc/dnsmasq.d/04-pihole-static-dhcp.conf
     pihole restartdns
 fi
 
