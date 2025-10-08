@@ -3,16 +3,20 @@
 # FILE: setup_all.sh
 # DESCRIPTION: Main setup script executed by the preseed late_command.
 # It calls individual setup scripts for ufw, ssh, unbound, pihole, keepalived,
-# and nebula-sync. It collects the pi-hole password and passes it to 
-# the pihole setup script.
+# and nebula-sync. It collects the pi-hole and keepalived passwords
+# as arguments and passes them to the appropriate setup scripts.
 
-### Retrieve Pi-hole password
-# This is passed as the first argument from the late_command in the 
-# preseed.cfg.
+### Retrieve Pi-hole and Keepalived passwords
 PIHOLE_PASSWORD="$1"
+KEEPALIVED_PASSWORD="$2"
 # Check if the Pi-hole password was received.
 if [ -z "$PIHOLE_PASSWORD" ]; then
     echo "Error: Pi-hole password was not passed as an argument."
+    exit 1
+fi
+# Check if the Keepalived password was received.
+if [ -z "$KEEPALIVED_PASSWORD" ]; then
+    echo "Error: Keepalived password was not passed as an argument."
     exit 1
 fi
 
@@ -42,15 +46,18 @@ echo "Running setup_pihole.sh..."
 /root/setup_scripts/setup_pihole.sh "$PIHOLE_PASSWORD"
 
 ### Keepalived Setup
-# Install and configure Keepalived for IP redundancy.
+# Configure Keepalived, using the collected password.
 # The 'keepalived' package is included in pkgsel/include.
+# The password is passed as an argument to the script.
 echo "Running setup_keepalived.sh..."
-/root/setup_scripts/setup_keepalived.sh
+/root/setup_scripts/setup_keepalived.sh "$KEEPALIVED_PASSWORD"
 
 ### Nebula-Sync Setup
-# Install and configure the Nebula-Sync service.
+# Install and configure the Nebula-Sync service, 
+# using the collected password.
+# The password is passed as an argument to the script.
 echo "Running setup_nebula-sync.sh..."
-/root/setup_scripts/setup_nebula-sync.sh
+/root/setup_scripts/setup_nebula-sync.sh "$PIHOLE_PASSWORD"
 
 echo "--- All setup scripts complete ---"
 

@@ -2,27 +2,25 @@
 
 # FILE: setup_unbound.sh
 # DESCRIPTION: A script to install and configure Unbound as a fully recursive DNS resolver
-# with security and privacy hardening. This script is designed to be called from the main
-# setup_all.sh script.
-# VERSION: 1.3
-# DATE: 2025-09-21
+# with security and privacy hardening. 
+# This script is designed to be called from the main setup_all.sh script.
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-echo "Starting Unbound DNS resolver setup..."
+echo "Setting up Unbound DNS resolver..."
 
-# 1. Install Unbound.
-# The `preseed.cfg` does not include Unbound by default, so we install it here.
+### Install Unbound
+# unbound is not installed as part of the preseed.cfg, so we install it here.
 apt-get update
 apt-get install -y unbound
 
-# 2. Download the root hints file.
+### Download Root Hints
 # This file is essential for Unbound to resolve top-level domains from the root servers.
 echo "Downloading root hints file..."
 wget -O /var/lib/unbound/root.hints https://www.internic.net/domain/named.root
 
-# 3. Create the Unbound configuration file.
+### Create the Unbound configuration file
 # This creates a minimal configuration that runs Unbound in fully recursive mode.
 echo "Creating Unbound configuration file..."
 cat > /etc/unbound/unbound.conf << EOF
@@ -30,63 +28,110 @@ server:
     # Use the local interface and a non-standard port to avoid conflicts with Pi-hole.
     interface: 127.0.0.1
     port: 5353
-
-    # The access control list.
-    # We only allow local connections, as Unbound will be used by Pi-hole.
+    do-ip4: yes
+    do-udp: yes
+    do-tcp: yes
+    do-ip6: no
+    # Only allow local connections, as Unbound will be used by Pi-hole.
     access-control: 127.0.0.1/32 allow
-
     # Force full recursion.
+    do-recursion: yes
     do-not-query-address: 127.0.0.1
     do-not-query-address: ::1
     root-hints: "/var/lib/unbound/root.hints"
-
     # Set verbosity level to minimal.
     verbosity: 0
 
-    # -------- DNSSEC AND HARDENING SETTINGS --------
+    ### Security Settings
+    # Enable DNSSEC validation to ensure authenticity of DNS responses,
+    # and applies other hardening settings.
     # Ensure Unbound operates in a secure mode.
     harden-glue: yes
     harden-dnssec-stripped: yes
-    use-caps-for-id: yes
-
+    # Don't use capitalisation randomization as it known to cause DNSSEC issues sometimes
+    # see https://discourse.pi-hole.net/t/unbound-stubby-or-dnscrypt-proxy/9378 for further details
+    use-caps-for-id: no
+    # Enable aggressive NSEC handling to improve security.
+    aggressive-nsec: yes
     # Prevents resolving subdomains of a non-existent domain.
     harden-below-nxdomain: yes
-
     # Protect against buffer overflows from malformed queries.
     harden-heap-buffers: yes
     harden-large-queries: yes
+    # Set a threshold for dropped forged replies before dropping all
+    # traffic from an IP. This mitigates cache poisoning attacks by 
+    # aggressively dropping unwanted replies.
+    unwanted-reply-threshold: 10000000
+    # Minimum TTL for cache entries (in seconds). Prevents excessive 
+    # queries for records with very short (e.g., 0-second) TTLs, 
+    # reducing upstream load.
+    cache-min-ttl: 60
+    # Maximum TTL for cache entries (in seconds). Prevents records 
+    # with excessively long TTLs from staying in the cache for too long,
+    # mitigating prolonged effect of a cache poisoning event.
+    cache-max-ttl: 86400
+    # Deny resolving these private address ranges to public names.
+    # This mitigates DNS Rebinding attacks by ensuring that private 
+    # IPs (like 192.168.x.x) cannot be resolved from public DNS names.
+    private-address: 192.168.0.0/16
+    private-address: 172.16.0.0/12
+    private-address: 10.0.0.0/8
+    private-address: 169.254.0.0/16
+    private-address: fd00::/8
+    private-address: fe80::/10
 
-    # -------- PRIVACY SETTINGS --------
+    ### Privacy Settings
     # Prevents Unbound from revealing its identity or version.
     hide-identity: yes
     hide-version: yes
-
     # Implements QNAME minimisation to enhance privacy.
     qname-minimisation: yes
-
     # Do not log queries.
     log-queries: no
 
-    # -------- PERFORMANCE SETTINGS --------
-    # Set up cache sizes.
-    msg-cache-size: 32m
-    rrset-cache-size: 64m
-
-    # Pre-emptively fetch expired cache entries.
+    ### Performance Settings
+    # Use all available cores for concurrent query processing.
+    num-threads: 4
+    # Allow multiple threads to listen on the same UDP/TCP port.
+    so-reuseport: yes
+    # The number of file descriptor slabs should be a power of 2 near
+    # num-threads to prevent lock contention.
+    msg-cache-slabs: 4
+    rrset-cache-slabs: 4
+    infra-cache-slabs: 4
+    key-cache-slabs: 4
+    # Significantly increase cache sizes to utilize 8GB of RAM.
+    # rrset-cache-size is typically set to twice the msg-cache-size.
+    # These settings provide approximately 768MB of dedicated cache memory.
+    msg-cache-size: 256m
+    rrset-cache-size: 512m
+    # Increase the number of concurrent queries and outgoing sockets per thread.
+    # Large values require higher system file descriptor limits,
+    # default is often 1024 total.
+    outgoing-range: 4096
+    num-queries-per-thread: 2048
+    # Set socket buffer sizes to handle high loads and traffic spikes.
+    so-rcvbuf: 4m
+    so-sndbuf: 4m
+    # Pre-emptively fetch expriring cache entries and DNSSEC key (DNSKEY) records 
+    # to keep popular entries primed.
     prefetch: yes
-
+    prefetch-key: yes
     # Prevent a single client from overwhelming the server with queries.
     # Adjust this value based on your needs.
-    ip-ratelimit: 50
+    ip-ratelimit: 100
+
+    ### Logging Settings
+    use-syslog: yes
 EOF
 
-# 4. Enable and start the Unbound service.
+### Enable and Start Unbound
 # This ensures that Unbound starts automatically on boot.
 echo "Enabling and starting Unbound service..."
 systemctl enable unbound
 systemctl start unbound
 
-# 5. Test Unbound to ensure it is working correctly.
+### Test Unbound
 # We use 'dig' to query a well-known domain.
 echo "Testing Unbound DNS resolver..."
 dig @127.0.0.1 -p 5353 google.com > /dev/null
