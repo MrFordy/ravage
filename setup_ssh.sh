@@ -27,4 +27,9 @@ sed -i 's/^#\?PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_
 echo "Restarting SSH service to apply changes..."
 systemctl restart ssh
 
-echo "SSH setup and hardening complete."
+### Completion Message
+echo ""
+echo "=============================================================="
+echo "                SSH Setup and Hardening Complete"
+echo "=============================================================="
+echo ""

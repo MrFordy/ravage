@@ -78,4 +78,9 @@ else
     exit 1
 fi
 
-echo "Pi-hole setup complete."
+### Completion Message
+echo ""
+echo "=============================================================="
+echo "                   Pi-hole Setup Complete"
+echo "=============================================================="
+echo ""

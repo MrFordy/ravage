@@ -20,8 +20,6 @@ if [ -z "$KEEPALIVED_PASSWORD" ]; then
     exit 1
 fi
 
-echo "--- Starting all setup scripts ---"
-
 ### Firewall (UFW) Setup
 # ufw was insalled by 'tasksel' in the preseed file. This script
 # applies configuration settings.
@@ -59,8 +57,8 @@ echo "Running setup_keepalived.sh..."
 echo "Running setup_nebula-sync.sh..."
 /root/setup_scripts/setup_nebula-sync.sh "$PIHOLE_PASSWORD"
 
-echo "=============================================="
-echo "  All setup scripts completed successfully"
-echo "=============================================="
+echo "=============================================================="
+echo "         All setup scripts completed successfully"
+echo "=============================================================="
 
 exit 0

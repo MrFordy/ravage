@@ -140,4 +140,9 @@ else
     exit 1
 fi
 
-echo "Unbound setup complete."
+### Completion Message
+echo ""
+echo "=============================================================="
+echo "                     Unbound Setup Complete"
+echo "=============================================================="
+echo ""

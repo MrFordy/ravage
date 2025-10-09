@@ -152,18 +152,14 @@ fi
 echo "Checking timer status..."
 systemctl status nebula-sync.timer --no-pager || true
 
-### Final instructions
+### Completion Message
 echo ""
-echo "================================================"
-echo "  nebula-sync Setup Complete"
-echo "================================================"
-echo ""
+echo "=============================================================="
+echo "                  Nebula-Sync Setup Complete"
+echo "=============================================================="
+
 echo "Configuration Summary:"
-echo "  Primary:  http://192.168.0.250"
-echo "  Replica:  http://192.168.0.251"
+echo "  Primary Pi-Hole: Ravage http://192.168.0.250"
+echo "  Replica Pi-Hole: Howlback http://192.168.0.251"
 echo "  Schedule: Every hour"
 echo ""
-echo "The timer will automatically run nebula-sync every hour."
-echo ""
-
-echo "nebula-sync setup complete."

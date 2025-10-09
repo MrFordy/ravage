@@ -96,4 +96,9 @@ else
     echo "WARNING: Virtual IP address was not found. Check Keepalived logs."
 fi
 
-echo "Keepalived setup complete."
+### Completion Message
+echo ""
+echo "=============================================================="
+echo "                   Keepalived Setup Complete"
+echo "=============================================================="
+echo ""

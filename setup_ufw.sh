@@ -26,4 +26,9 @@ ufw allow 123/udp        # Port 123 (NTP) - For time synchronization
 # Prevents installer from hanging at "Are you sure?"
 ufw --force enable
 
-echo "Firewall Setup Complete"
+### Completion Message
+echo ""
+echo "=============================================================="
+echo "                UFW (Firewall) Setup Complete"
+echo "=============================================================="
+echo ""
