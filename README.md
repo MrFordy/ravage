@@ -1,4 +1,4 @@
-#Ravage - Automated Pi-hole High Availability Setup
+# Ravage - Automated Pi-hole High Availability Setup
 An automated Debian installation system for deploying a highly-available Pi-hole DNS server with ad-blocking, DHCP, and recursive DNS resolution.
 
 Overview
