@@ -14,6 +14,10 @@ echo "Setting up Unbound DNS resolver..."
 # This file is essential for Unbound to resolve top-level domains from the root servers.
 echo "Downloading root hints file..."
 wget -O /var/lib/unbound/root.hints https://www.internic.net/domain/named.root
+if [ ! -s /var/lib/unbound/root.hints ]; then
+    echo "ERROR: Failed to download root.hints"
+    exit 1
+fi
 
 ### Create the Unbound configuration file
 # This creates a minimal configuration that runs Unbound in fully recursive mode.
@@ -130,7 +134,6 @@ systemctl start unbound
 # We use 'dig' to query a well-known domain.
 echo "Testing Unbound DNS resolver..."
 dig @127.0.0.1 -p 5353 google.com > /dev/null
-
 # The `if` statement checks the exit status of the previous command.
 if [ $? -eq 0 ]; then
     echo "Unbound is working correctly."

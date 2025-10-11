@@ -30,12 +30,22 @@ export PIHOLE_DNS_="127.0.0.1#5353"
 export INSTALL_WEB_SERVER=true
 export INSTALL_WEB_INTERFACE=true
 export DHCP_ACTIVE=true
-export DHCP_START="192.168.0.10"
+export DHCP_START="192.168.0.200"
 export DHCP_END="192.168.0.249"
+# Static DHCP leases in the range 192.168.0.1 - 192.168.0.199 and 
+# 192.168.0.250 - 192.168.0.255 are assigned from a separate file.
 export NTP_SERVER="ntp.org"
 export PIHOLE_SKIP_INSTALL_CHECK=true
 
-curl -sSL https://install.pi-hole.net | bash /dev/stdin
+### Download and run the Pi-hole installer script
+# The installer is fetched and piped directly to bash for execution.
+PIHOLE_INSTALLER=$(curl -fsSL https://install.pi-hole.net)
+if [ $? -eq 0 ]; then
+    echo "$PIHOLE_INSTALLER" | bash /dev/stdin
+else
+    echo "ERROR: Failed to download Pi-hole installer"
+    exit 1
+fi
 
 ### Set password for the Pi-hole web interface
 echo "Applying Pi-hole password..."
@@ -49,6 +59,7 @@ echo "https://nsfw.oisd.nl/" | tee -a /etc/pihole/adlists.list >/dev/null
 pihole -g
 
 ### Add static DHCP leases from a separate file
+# IP allocation explained in 04-pihole-static-dhcp.conf
 echo "Adding static DHCP leases from separate file..."
 if [ ! -f "/root/setup_scripts/04-pihole-static-dhcp.conf" ]; then
     echo "WARNING: No static DHCP leases file found. Skipping static lease configuration."

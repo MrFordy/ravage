@@ -85,10 +85,31 @@ else
     exit 1
 fi
 
-# A brief pause to allow the virtual IP to be assigned.
-sleep 5
+### Wait for the virtual IP to be assigned
+# Exponential backoff, max ~31 seconds).
+echo "Verifying virtual IP address..."
+SUCCESS=false
+WAIT=1
+for i in {1..5}; do
+    if ip addr show $PRIMARY_INTERFACE | grep -q "192.168.0.2"; then
+        echo "Virtual IP 192.168.0.2 is correctly configured on $PRIMARY_INTERFACE."
+        SUCCESS=true
+        break
+    fi
+    if [ $i -lt 5 ]; then
+        echo "Attempt $i: Virtual IP not yet assigned, waiting ${WAIT}s before retry..."
+        sleep $WAIT
+        WAIT=$((WAIT * 2))  # Double the wait time: 1, 2, 4, 8, 16 seconds
+    fi
+done
 
-# Check if the virtual IP is present on the interface.
+if [ "$SUCCESS" = false ]; then
+    echo "ERROR: Virtual IP address was not assigned after multiple attempts."
+    echo "Check Keepalived logs with: journalctl -u keepalived -n 20"
+    exit 1
+fi
+
+### Check if the virtual IP is present on the interface
 echo "Verifying virtual IP address..."
 if ip addr show $PRIMARY_INTERFACE | grep -q "192.168.0.2"; then
     echo "Virtual IP 192.168.0.2 is correctly configured on $PRIMARY_INTERFACE."
