@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # FILE: setup_ssh.sh
-# DESCRIPTION: A script to install and configure the SSH service with security best practices.
+# DESCRIPTION: A script to install and configure the SSH service.
 # This script is designed to be called from the main setup_all.sh script.
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-echo "Setting up SSH and hardening..."
+echo "Setting up SSH..."
 
 ### Backup Original Config
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
@@ -18,10 +18,6 @@ cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
 sed -i 's/^#\?Port 22/Port 2222/' /etc/ssh/sshd_config
 # Disable root login via ssh.
 sed -i 's/^#\?PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
-# Disable ssh login by password requiring key pair authentication.
-sed -i 's/^#\?PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
-# Enable public key authentication.
-sed -i 's/^#\?PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 
 ### Restart SSH to apply the new configuration.
 echo "Restarting SSH service to apply changes..."
@@ -30,6 +26,6 @@ systemctl restart ssh
 ### Completion Message
 echo ""
 echo "=============================================================="
-echo "                SSH Setup and Hardening Complete"
+echo "                      SSH Setup Complete"
 echo "=============================================================="
 echo ""

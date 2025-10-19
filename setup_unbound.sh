@@ -21,6 +21,7 @@ fi
 
 ### Create the Unbound configuration file
 # This creates a minimal configuration that runs Unbound in fully recursive mode.
+# Port 5353 is used to avoid conflicts with Pi-hole, which will listen on port 53.
 echo "Creating Unbound configuration file..."
 cat > /etc/unbound/unbound.conf << EOF
 server:
@@ -146,6 +147,6 @@ fi
 ### Completion Message
 echo ""
 echo "=============================================================="
-echo "                     Unbound Setup Complete"
+echo "                    Unbound Setup Complete"
 echo "=============================================================="
 echo ""

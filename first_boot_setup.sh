@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# FILE: first-boot-setup.sh
+# FILE: first_boot_setup.sh
 # DESCRIPTION: First boot setup script - collects passwords interactively
 # and runs the main configuration scripts. This script is called by a
 # systemd service on first boot after installation.
 
 echo "=============================================================="
-echo "               RAVAGE FIRST-BOOT CONFIGURATION"
+echo "               RAVAGE FIRST BOOT CONFIGURATION"
 echo "=============================================================="
 echo ""
 echo "This script will collect passwords for Pi-hole and Keepalived."

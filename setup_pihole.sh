@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # FILE: setup_pihole.sh
-# DESCRIPTION: A script to install and configure Pi-hole with a secure, hardened setup.
+# DESCRIPTION: A script to install and configure Pi-hole with a secure setup.
 # This script is designed to be called from the main setup_all.sh script.
 
 # Exit immediately if a command exits with a non-zero status.
@@ -68,7 +68,7 @@ else
     pihole restartdns
 fi
 
-### Final hardening and system configuration
+### Final system configuration
 echo "Configuring host system DNS to use Pi-hole..."
 echo "nameserver 127.0.0.1" > /etc/resolv.conf
 

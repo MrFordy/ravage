@@ -21,7 +21,7 @@ if [ -z "$KEEPALIVED_PASSWORD" ]; then
     exit 1
 fi
 
-echo "Using provided Keepalived authentication password."
+echo "Using provided Keepalived password."
 echo "IMPORTANT: Use this same password on all other Keepalived nodes."
 
 ### Dynamically determine the primary network interface
@@ -44,7 +44,7 @@ vrrp_instance VI_1 {
     state MASTER
     # The network interface to monitor, detected dynamically.
     interface $PRIMARY_INTERFACE
-    # Must be the same on all nodes in the cluster (1-255).
+    # Virtual router ID must be the same on all nodes in the cluster (1-255).
     virtual_router_id 51
     # The MASTER should have a higher priority than BACKUP nodes.
     priority 101
@@ -86,7 +86,7 @@ else
 fi
 
 ### Wait for the virtual IP to be assigned
-# Exponential backoff, max ~31 seconds).
+# Exponential backoff, max ~31 seconds.
 echo "Verifying virtual IP address..."
 SUCCESS=false
 WAIT=1
