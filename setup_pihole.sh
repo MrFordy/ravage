@@ -2,7 +2,7 @@
 
 # FILE: setup_pihole.sh
 # DESCRIPTION: A script to install and configure Pi-hole with a secure setup.
-# This script is designed to be called from the main setup_all.sh script.
+# This script is designed to be called from the main setup_all.sh script. 
 
 # Exit immediately if a command exits with a non-zero status.
 set -e

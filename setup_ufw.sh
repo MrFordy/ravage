@@ -2,7 +2,7 @@
 
 # FILE: setup_ufw.sh
 # DESCRIPTION: Script to set up UFW (Firewall)
-# This script is designed to be called from the main setup_all.sh script.
+# This script is designed to be called from the main setup_all.sh script. 
 
 # Exit immediately if a command exits with a non-zero status.
 set -e

@@ -4,7 +4,7 @@
 # DESCRIPTION: Main setup script executed by the preseed late_command.
 # It calls individual setup scripts for ufw, ssh, unbound, pihole, keepalived,
 # and nebula-sync. It collects the pi-hole and keepalived passwords
-# as arguments and passes them to the appropriate setup scripts.
+# as arguments and passes them to the appropriate setup scripts. 
 
 ### Retrieve Pi-hole and Keepalived passwords
 PIHOLE_PASSWORD="$1"

@@ -3,7 +3,7 @@
 # FILE: first_boot_setup.sh
 # DESCRIPTION: First boot setup script - collects passwords interactively
 # and runs the main configuration scripts. This script is called by a
-# systemd service on first boot after installation.
+# systemd service on first boot after installation. 
 
 echo "=============================================================="
 echo "               RAVAGE FIRST BOOT CONFIGURATION"

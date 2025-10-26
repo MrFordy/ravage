@@ -4,7 +4,7 @@
 # DESCRIPTION: A script to install and configure Keepalived for high availability.
 # This script sets up a VRRP instance to manage a virtual IP address, making
 # the Pi-hole service redundant. It is designed to be called from the main 
-# setup_all.sh script with the Keepalived password as an argument.
+# setup_all.sh script with the Keepalived password as an argument. 
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
