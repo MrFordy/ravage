@@ -4,6 +4,7 @@
 # DESCRIPTION: First boot setup script - collects passwords interactively
 # and runs the main configuration scripts. This script is called by a
 # systemd service on first boot after installation. 
+# Changed from CRLF to LF line endings
 
 echo "=============================================================="
 echo "               RAVAGE FIRST BOOT CONFIGURATION"

@@ -5,6 +5,7 @@
 # This script sets up a VRRP instance to manage a virtual IP address, making
 # the Pi-hole service redundant. It is designed to be called from the main 
 # setup_all.sh script with the Keepalived password as an argument. 
+# Changed from CRLF to LF line endings
 
 # Exit immediately if a command exits with a non-zero status.
 set -e

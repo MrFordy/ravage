@@ -5,6 +5,7 @@
 # It calls individual setup scripts for ufw, ssh, unbound, pihole, keepalived,
 # and nebula-sync. It collects the pi-hole and keepalived passwords
 # as arguments and passes them to the appropriate setup scripts. 
+# Changed from CRLF to LF line endings
 
 ### Retrieve Pi-hole and Keepalived passwords
 PIHOLE_PASSWORD="$1"

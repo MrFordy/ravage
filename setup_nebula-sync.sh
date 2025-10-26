@@ -5,6 +5,7 @@
 # This script downloads the nebula-sync binary, configures it to synchronize
 # Pi-hole settings to replica instances, and sets up a cron job for automatic
 # synchronization. It is designed to be called from the main setup_all.sh script. 
+# Changed from CRLF to LF line endings
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
